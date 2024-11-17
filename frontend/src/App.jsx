@@ -1,10 +1,11 @@
 import "./App.css";
-import Login from "./pages/login/Login";
+import SearchInput from "./components/sidebar/SearchInput";
+import Home from "./pages/home/Home";
 
 function App() {
   return (
-    <div className="p-4 h-screen flex items-center justify-center text-white font-bold">
-      <Login />
+    <div className="p-5 h-screen sm:h-screen flex  sm:items-center sm:justify-center text-white font-bold">
+      <Home />
     </div>
   );
 }
