@@ -38,23 +38,38 @@ export const signup = async (req, res) => {
 export const login = async (req, res) => {
   try {
     const { username, password } = req.body;
+
+    // Check if the user exists
     const user = await User.findOne({ username });
+    const isPasswordCorrect = await bcrypt.compare(
+      password,
+      user?.password || ""
+    );
+
     if (!user) {
-      return res.status(400).json({ error: "User not found" });
+      return res.status(400).json({ error: "Invalid username " });
     }
-    const isPasswordcorrect = await bcrypt.compare(password, user.password);
-    if (!isPasswordcorrect) {
-      return res.status(400).json({ error: "Password incurrect" });
+    if (!isPasswordCorrect) {
+      return res.status(400).json({ error: "Input Right Password " });
     }
+
+    // Generate token and set it in a cookie
     generateTokenAndSetCookie(user._id, res);
-    res.status(201).json({
+
+    // Send the user details in the response
+    return res.status(200).json({
       _id: user._id,
       fullName: user.fullName,
       username: user.username,
       profilepic: user.profilepic,
     });
   } catch (error) {
-    console.log("Error from login Method", error.message);
+    console.error("Error in login method:", error.message);
+
+    // Send an error response to the client
+    return res
+      .status(500)
+      .json({ error: "Server error. Please try again later." });
   }
 };
 
