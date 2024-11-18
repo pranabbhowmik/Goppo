@@ -13,7 +13,9 @@ const Message = () => {
           />
         </div>
       </div>
-      <div className={`chat-bubble text-white bg-blue-500`}>Hi what Up?</div>
+      <div className={`chat-bubble text-white bg-green-900`}>
+        Hi what Up? I love ypu Joyi This is me pranab Hear
+      </div>
       <div className={`chat-footer opacity-50 text-xs flex gap-1 items-center`}>
         12:42
       </div>
