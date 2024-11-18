@@ -1,5 +1,6 @@
 import React from "react";
 import logo from "../../../public/goppo.png";
+import { NavLink } from "react-router-dom";
 
 const Login = () => {
   return (
@@ -33,12 +34,12 @@ const Login = () => {
               className="w-full input input-bordered h-10"
             />
           </div>
-          <a
-            href="#"
+          <NavLink
+            to={"/signup"}
             className="text-sm  hover:underline hover:text-blue-600 mt-2 inline-block"
           >
             {"Don't"} have an account?
-          </a>
+          </NavLink>
 
           <div>
             <button className="btn btn-block btn-sm mt-2">Login</button>
