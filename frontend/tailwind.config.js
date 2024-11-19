@@ -2,7 +2,12 @@
 export default {
   content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
   theme: {
-    extend: {},
+    extend: {
+      fontFamily: {
+        robotoMono: ['"Roboto Mono"', "monospace"],
+        Geist: ['"Geist Mono"', "monospace"],
+      },
+    },
   },
   plugins: [require("daisyui")],
 };

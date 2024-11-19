@@ -2,19 +2,22 @@ import React from "react";
 import Messages from "./Messages";
 import { TiMessages } from "react-icons/ti";
 import MessageInput from "./MessageInput";
+import useConversation from "../../zustand/useConversation";
 
 const MessageContainer = () => {
-  const noChatSelected = false;
+  const { selectedConversation, setSelectedConversation } = useConversation();
   return (
     <div className="flex flex-col py-2 w-96 md:min-w-[450px] h-full">
-      {noChatSelected ? (
+      {!selectedConversation ? (
         <NoChatSelected />
       ) : (
         <>
           {/* Header */}
-          <div className="bg-slate-500 px-4 py-2 mb-2 flex items-center justify-between">
-            <span className="label-text text-sm md:text-base">To:</span>
-            <span className="text-gray-900 font-bold text-sm md:text-base">
+          <div className="bg-slate-900 px-4 py-2 mb-2 flex items-center justify-between">
+            <span className="label-text text-sm md:text-base text-white">
+              To:
+            </span>
+            <span className="text-white font-bold text-sm md:text-base">
               John Doe
             </span>
           </div>

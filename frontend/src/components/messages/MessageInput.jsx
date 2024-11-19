@@ -7,7 +7,7 @@ const MessageInput = () => {
       <div className="relative w-full">
         <input
           type="text"
-          className="border text-sm rounded-lg block w-full p-2.5 pr-10 bg-gray-700 border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
+          className="border text-sm font-normal font-Geist rounded-lg block w-full p-2.5 pr-10 bg-slate-900 border-gray-600 text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           placeholder="Send a message"
         />
         <button
