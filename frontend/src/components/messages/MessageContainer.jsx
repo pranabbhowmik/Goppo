@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import Messages from "./Messages";
 import { TiMessages } from "react-icons/ti";
 import MessageInput from "./MessageInput";
@@ -6,6 +6,10 @@ import useConversation from "../../zustand/useConversation";
 
 const MessageContainer = () => {
   const { selectedConversation, setSelectedConversation } = useConversation();
+
+  useEffect(() => {
+    return () => setSelectedConversation(null);
+  }, [setSelectedConversation]);
   return (
     <div className="flex flex-col py-2 w-96 md:min-w-[450px] h-full">
       {!selectedConversation ? (
@@ -18,7 +22,7 @@ const MessageContainer = () => {
               To:
             </span>
             <span className="text-white font-bold text-sm md:text-base">
-              John Doe
+              {selectedConversation.fullName}
             </span>
           </div>
 
