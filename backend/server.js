@@ -8,7 +8,7 @@ import connectDb from "./db/db.js";
 import { app, server } from "./socket/socket.js";
 import path from "path";
 
-// const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 5000;
 
 const __dirname = path.resolve();
 dotenv.config();
@@ -25,10 +25,11 @@ app.get("*", (req, res) => {
 });
 connectDb()
   .then(() => {
-    server.listen(process.env.PORT || 5000, () => {
-      console.log(`Server is running on port ${process.env.PORT}`);
+    server.listen(PORT, () => {
+      console.log(`Server is running on port ${PORT}`);
     });
   })
   .catch((err) => {
-    console.log("MongoDB connection error: ", err);
+    console.error("MongoDB connection error:", err.message);
+    process.exit(1); // Exit on error
   });
