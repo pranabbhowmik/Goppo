@@ -6,6 +6,7 @@ import "./App.css";
 import { Toaster } from "react-hot-toast";
 import Home from "./pages/home/Home";
 import { useAuthContext } from "./context/AuthContext";
+import MessageContainer from "./components/messages/MessageContainer";
 
 function App() {
   const { authUser } = useAuthContext();
@@ -23,6 +24,10 @@ function App() {
         <Route
           path="/signup"
           element={authUser ? <Navigate to="/" /> : <SignUp />}
+        />
+        <Route
+          path="/messages/:id"
+          element={authUser ? <MessageContainer /> : <Navigate to="/login" />}
         />
       </Routes>
       <Toaster />

@@ -8,7 +8,8 @@ const messageSchema = new Schema(
       ref: "User",
       required: true,
     },
-    reciverId: {
+    receiverId: {
+      // <-- Corrected spelling
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
@@ -17,6 +18,13 @@ const messageSchema = new Schema(
       type: String,
       required: true,
     },
+    attachments: [
+      {
+        url: String,
+        fileType: String,
+        fileName: String,
+      },
+    ],
   },
   { timestamps: true }
 );
