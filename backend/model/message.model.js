@@ -8,15 +8,23 @@ const messageSchema = new Schema(
       ref: "User",
       required: true,
     },
-    reciverId: {
+    receiverId: {
+      // <-- Corrected spelling
       type: mongoose.Schema.Types.ObjectId,
       ref: "User",
       required: true,
     },
     message: {
       type: String,
-      required: true,
+      default: "", // Changed from required: true to default: ""
     },
+    attachments: [
+      {
+        url: { type: String, required: true },
+        name: { type: String, default: "file" },
+        type: { type: String, default: "application/octet-stream" },
+      },
+    ],
   },
   { timestamps: true }
 );

@@ -1,10 +1,13 @@
+// hooks/useSendMessage.js
 import { useState } from "react";
 import useConversation from "../zustand/useConversation";
+import { toast } from "react-hot-toast";
+
 const useSendMessage = () => {
   const [loading, setLoading] = useState(false);
   const { messages, setMessages, selectedConversation } = useConversation();
 
-  const sendMessage = async (message) => {
+  const sendMessage = async (message, uploadedAttachments = []) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -14,7 +17,11 @@ const useSendMessage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ message }),
+          body: JSON.stringify({
+            message,
+            attachments:
+              uploadedAttachments.length > 0 ? uploadedAttachments : undefined,
+          }),
         }
       );
       const data = await res.json();
