@@ -8,24 +8,42 @@ export const sendMessage = async (req, res) => {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
-    console.log("messages", message);
-    console.log("Attachments", attachments);
+    let parsedAttachments = [];
 
-    let conversation = await Conversation.findOne({
-      participants: { $all: [senderId, receiverId] },
-    });
-
-    let parsedAttachments = attachments;
-
-    if (typeof attachments === "string") {
+    // Handle attachments parsing
+    if (attachments) {
       try {
-        parsedAttachments = JSON.parse(attachments);
+        // If attachments is already an array (from direct API call)
+        if (Array.isArray(attachments)) {
+          parsedAttachments = attachments;
+        }
+        // If attachments is a string (from JSON stringified data)
+        else if (typeof attachments === "string") {
+          parsedAttachments = JSON.parse(attachments);
+        }
+
+        // Validate each attachment object
+        parsedAttachments = parsedAttachments.map((attachment) => ({
+          url: attachment.url || "",
+          name: attachment.name || "file",
+          type: attachment.type || "application/octet-stream",
+        }));
       } catch (err) {
-        console.error("Failed to parse attachments:", err.message);
+        console.error("Error parsing attachments:", err);
         parsedAttachments = [];
       }
     }
 
+    // Validate required fields
+    if (!message && parsedAttachments.length === 0) {
+      return res
+        .status(400)
+        .json({ error: "Message or attachment is required" });
+    }
+
+    let conversation = await Conversation.findOne({
+      participants: { $all: [senderId, receiverId] },
+    });
 
     if (!conversation) {
       conversation = await Conversation.create({
@@ -36,17 +54,14 @@ export const sendMessage = async (req, res) => {
 
     const newMessage = await Message.create({
       senderId,
-      receiverId, // corrected field name
-      message,
-      attachments: parsedAttachments, // corrected to match schema
+      receiverId,
+      message: message || "", // Ensure message is at least an empty string
+      attachments: parsedAttachments,
     });
-
-    console.log("New Messages", newMessage);
 
     conversation.messages.push(newMessage._id);
     await conversation.save();
 
-    // Emit event for real-time messaging
     const receiverSocketId = getReceiverSocketId(receiverId);
     if (receiverSocketId) {
       io.to(receiverSocketId).emit("newMessage", newMessage);

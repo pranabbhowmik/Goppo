@@ -17,7 +17,11 @@ const useSendMessage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ message, attachments: uploadedAttachments }),
+          body: JSON.stringify({
+            message,
+            attachments:
+              uploadedAttachments.length > 0 ? uploadedAttachments : undefined,
+          }),
         }
       );
       const data = await res.json();

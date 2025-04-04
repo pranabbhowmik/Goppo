@@ -16,13 +16,13 @@ const messageSchema = new Schema(
     },
     message: {
       type: String,
-      required: true,
+      default: "", // Changed from required: true to default: ""
     },
     attachments: [
       {
-        url: String,
-        name: String,
-        type: String,
+        url: { type: String, required: true },
+        name: { type: String, default: "file" },
+        type: { type: String, default: "application/octet-stream" },
       },
     ],
   },
