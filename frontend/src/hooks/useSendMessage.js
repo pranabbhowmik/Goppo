@@ -7,7 +7,7 @@ const useSendMessage = () => {
   const [loading, setLoading] = useState(false);
   const { messages, setMessages, selectedConversation } = useConversation();
 
-  const sendMessage = async (message, attachments = []) => {
+  const sendMessage = async (message, uploadedAttachments = []) => {
     setLoading(true);
     try {
       const res = await fetch(
@@ -17,7 +17,7 @@ const useSendMessage = () => {
           headers: {
             "Content-Type": "application/json",
           },
-          body: JSON.stringify({ message, attachments }),
+          body: JSON.stringify({ message, attachments: uploadedAttachments }),
         }
       );
       const data = await res.json();

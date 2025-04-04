@@ -21,8 +21,8 @@ const messageSchema = new Schema(
     attachments: [
       {
         url: String,
-        fileType: String,
-        fileName: String,
+        name: String,
+        type: String,
       },
     ],
   },

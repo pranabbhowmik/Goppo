@@ -8,9 +8,24 @@ export const sendMessage = async (req, res) => {
     const { id: receiverId } = req.params;
     const senderId = req.user._id;
 
+    console.log("messages", message);
+    console.log("Attachments", attachments);
+
     let conversation = await Conversation.findOne({
       participants: { $all: [senderId, receiverId] },
     });
+
+    let parsedAttachments = attachments;
+
+    if (typeof attachments === "string") {
+      try {
+        parsedAttachments = JSON.parse(attachments);
+      } catch (err) {
+        console.error("Failed to parse attachments:", err.message);
+        parsedAttachments = [];
+      }
+    }
+
 
     if (!conversation) {
       conversation = await Conversation.create({
@@ -23,8 +38,10 @@ export const sendMessage = async (req, res) => {
       senderId,
       receiverId, // corrected field name
       message,
-      attachments, // corrected to match schema
+      attachments: parsedAttachments, // corrected to match schema
     });
+
+    console.log("New Messages", newMessage);
 
     conversation.messages.push(newMessage._id);
     await conversation.save();
