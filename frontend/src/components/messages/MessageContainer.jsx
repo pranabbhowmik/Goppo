@@ -14,28 +14,56 @@ const MessageContainer = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    // If there's an ID in the URL but no selected conversation,
-    // we should fetch the conversation data here
     if (id && !selectedConversation?._id) {
-      // You'll need to implement this function to fetch conversation by ID
       fetchConversation(id);
     }
-  }, [id, selectedConversation]);
+  }, [id]);
+
+  useEffect(() => {
+    if (selectedConversation?.receiverId && !selectedConversation.username) {
+      fetchReceiverUser(selectedConversation.receiverId);
+    }
+  }, [selectedConversation?.receiverId]);
 
   const fetchConversation = async (conversationId) => {
     try {
-      const res = await fetch(`/api/users/${conversationId}`);
+      const res = await fetch(`/api/messages/${conversationId}`);
       const data = await res.json();
+
       if (res.ok) {
-        setSelectedConversation(data);
+        setSelectedConversation({
+          _id: conversationId,
+          receiverId: data.receiverId,
+        });
+        console.log("Fetched conversation:", data);
+      } else {
+        console.error("Failed to fetch conversation");
       }
     } catch (error) {
-      console.error("Failed to fetch conversation:", error);
+      console.error("Error fetching conversation:", error);
+    }
+  };
+
+  const fetchReceiverUser = async (receiverId) => {
+    try {
+      const res = await fetch(`/api/users/${receiverId}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        setSelectedConversation((prev) => ({
+          ...prev,
+          username: data.fullName,
+        }));
+      } else {
+        console.error("Failed to fetch user");
+      }
+    } catch (error) {
+      console.error("Error fetching user:", error);
     }
   };
 
   return (
-    <div className="flex flex-col py-2 w-96 md:min-w-[450px] h-full">
+    <div className="flex flex-col py-2 w-[400px] md:w-[550px] h-full">
       {!selectedConversation ? (
         <NoChatSelected />
       ) : (
@@ -61,7 +89,7 @@ const MessageContainer = () => {
                 To:
               </span>
               <span className="text-white font-bold text-sm md:text-base">
-                {selectedConversation?.fullName}
+                {selectedConversation?.username}
               </span>
             </div>
           </div>

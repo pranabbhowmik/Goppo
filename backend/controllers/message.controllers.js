@@ -93,3 +93,23 @@ export const getMessages = async (req, res) => {
     res.status(500).json({ error: "Internal Server Error" });
   }
 };
+
+// getConversationDetails
+
+export const getConversationDetails = async (req, res) => {
+  try {
+    const { id: conversationId } = req.params;
+    const conversation = await Conversation.findById(conversationId)
+      .populate("participants")
+      .populate("messages");
+
+    if (!conversation) {
+      return res.status(404).json({ error: "Conversation not found" });
+    }
+
+    res.status(200).json(conversation);
+  } catch (error) {
+    console.error("Error in getConversationDetails controller:", error.message);
+    res.status(500).json({ error: "Internal Server Error" });
+  }
+};

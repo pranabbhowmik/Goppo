@@ -1,5 +1,6 @@
 import express from "express";
 import {
+  getConversationDetails,
   getMessages,
   sendMessage,
 } from "../controllers/message.controllers.js";
@@ -8,4 +9,5 @@ const router = express.Router();
 router.get("/:id", protectRoute, getMessages);
 router.post("/send/:id", protectRoute, sendMessage);
 
+router.get("/conversations/:id", protectRoute, getConversationDetails);
 export default router;
