@@ -1,20 +1,30 @@
 import React from "react";
 import useConversation from "../../zustand/useConversation";
 import { useSocketContext } from "../../context/SocketContext";
+import { useNavigate } from "react-router-dom";
 
 const Conversation = ({ conversation, lastIdx, emoji }) => {
-  const { selectedConversation, setSelectedConversation } = useConversation();
-
-  const isSelected = selectedConversation?._id === conversation._id;
+  const { setSelectedConversation } = useConversation();
+  const navigate = useNavigate();
   const { onlineUsers } = useSocketContext();
   const isOnline = onlineUsers.includes(conversation._id);
+
+  const handleClick = () => {
+    // Make sure we're passing the complete conversation object
+    setSelectedConversation({
+      _id: conversation._id,
+      fullName: conversation.fullName,
+      profilepic: conversation.profilepic,
+      // Include any other necessary fields
+    });
+    navigate(`/messages/${conversation._id}`);
+  };
+
   return (
     <>
       <div
-        className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer
-				${isSelected ? "bg-sky-500" : ""}
-			`}
-        onClick={() => setSelectedConversation(conversation)}
+        className={`flex gap-2 items-center hover:bg-sky-500 rounded p-2 py-1 cursor-pointer`}
+        onClick={handleClick}
       >
         <div className={`avatar ${isOnline ? "online" : ""}`}>
           <div className="w-12 rounded-full">

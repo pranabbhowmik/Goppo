@@ -6,12 +6,12 @@ import "./App.css";
 import { Toaster } from "react-hot-toast";
 import Home from "./pages/home/Home";
 import { useAuthContext } from "./context/AuthContext";
-import MessageContainer from "./components/messages/MessageContainer";
+import MessagesPage from "./pages/messages/MassagesPage";
 
 function App() {
   const { authUser } = useAuthContext();
   return (
-    <div className=" h-screen sm:h-screen flex  sm:items-center sm:justify-center font-bold">
+    <div className="h-screen sm:h-screen flex sm:items-center sm:justify-center font-bold">
       <Routes>
         <Route
           path="/"
@@ -27,7 +27,7 @@ function App() {
         />
         <Route
           path="/messages/:id"
-          element={authUser ? <MessageContainer /> : <Navigate to="/login" />}
+          element={authUser ? <MessagesPage /> : <Navigate to="/login" />}
         />
       </Routes>
       <Toaster />
